@@ -1,0 +1,58 @@
+#include <stdio.h>
+
+#define MAX 5
+#define LEN 20
+
+char history[MAX][LEN];
+int index = 0;
+
+/* push operation */
+void saveCall(const char *num) {
+    if (index >= MAX) {
+        printf("History limit reached\n");
+        return;
+    }
+    int i = 0;
+    while (num[i] != '\0') {
+        history[index][i] = num[i];
+        i++;
+    }
+    history[index][i] = '\0';
+    printf("Saved call: %s\n", history[index]);
+    index++;
+}
+
+/* pop operation */
+void deleteRecent() {
+    if (index == 0) {
+        printf("No calls to delete\n");
+        return;
+    }
+    index--;
+    printf("Deleted call: %s\n", history[index]);
+}
+
+/* display stack */
+void showCalls() {
+    if (index == 0) {
+        printf("No call history\n");
+        return;
+    }
+
+    printf("\nRecent Calls:\n");
+    for (int i = index - 1; i >= 0; i--) {
+        printf("%s\n", history[i]);
+    }
+}
+
+int main() {
+    saveCall("9001112233");
+    saveCall("9887766554");
+    saveCall("9123409876");
+
+    showCalls();
+    deleteRecent();
+    showCalls();
+
+    return 0;
+}
