@@ -1,0 +1,37 @@
+#include <stdio.h>
+
+int count = 0;
+int mutex = 1;
+int wrt = 1;
+
+void wait(int *s){ (*s)--; }
+void signal(int *s){ (*s)++; }
+
+void read_data(){
+    printf("Reading data\n");
+}
+
+int main(){
+    int free = 1;
+
+    do {
+        wait(&mutex);
+        count++;
+        if (count == 1)
+            wait(&wrt);
+        signal(&mutex);
+
+        read_data();
+
+        wait(&mutex);
+        count--;
+        if (count == 0)
+            signal(&wrt);
+        signal(&mutex);
+
+        free = 0;  
+
+    } while (free);
+
+    return 0;
+}
