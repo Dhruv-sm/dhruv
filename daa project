@@ -1,0 +1,65 @@
+import java.util.*;
+
+class Delivery {
+    int id;
+    int deadline;
+    int profit;
+
+    Delivery(int id, int deadline, int profit) {
+        this.id = id;
+        this.deadline = deadline;
+        this.profit = profit;
+    }
+}
+
+public class RobotDeliverySystem {
+
+    public static void main(String[] args) {
+
+        // Example deliveries (id, deadline, profit)
+        Delivery[] deliveries = {
+            new Delivery(1, 2, 100),
+            new Delivery(2, 1, 50),
+            new Delivery(3, 2, 10),
+            new Delivery(4, 1, 20)
+        };
+
+        // Sort deliveries by profit (descending)
+        Arrays.sort(deliveries, (a, b) -> b.profit - a.profit);
+
+        // Find maximum deadline
+        int maxDeadline = 0;
+        for (Delivery d : deliveries) {
+            if (d.deadline > maxDeadline) {
+                maxDeadline = d.deadline;
+            }
+        }
+
+        // Create slots
+        int[] slots = new int[maxDeadline + 1];
+        Arrays.fill(slots, -1);
+
+        int totalProfit = 0;
+
+        // Assign deliveries to slots
+        for (Delivery d : deliveries) {
+            for (int j = d.deadline; j > 0; j--) {
+                if (slots[j] == -1) {
+                    slots[j] = d.id;
+                    totalProfit += d.profit;
+                    break;
+                }
+            }
+        }
+
+        // Display selected deliveries
+        System.out.println("Selected Deliveries:");
+        for (int i = 1; i <= maxDeadline; i++) {
+            if (slots[i] != -1) {
+                System.out.println("Delivery ID: " + slots[i]);
+            }
+        }
+
+        System.out.println("Total Profit: " + totalProfit);
+    }
+}
